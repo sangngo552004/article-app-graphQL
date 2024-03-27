@@ -11,4 +11,14 @@ export const typeDefs = gql`
         hello : String,
         getListArticle : [Article]
     }
+    input ArticleInput {
+        title : String,
+        avatar : String,
+        description : String
+    }
+    type Mutation {
+        createArticle(article : ArticleInput) : Article,
+        deleteArticle(id : ID): String,
+        updateArticle(id : ID, article : ArticleInput) : Article
+    }
 `;
