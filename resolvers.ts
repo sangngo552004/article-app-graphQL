@@ -22,6 +22,17 @@ export const resolvers = {
             return categories;
         },
     },
+    Article: {
+        category: async (article) => {
+            console.log(article);
+            const {categoryId} = article;
+            console.log(categoryId);
+            const category = await Category.findOne({
+                _id : categoryId
+            });
+            return category;
+        }
+    },
     Mutation: {
         createArticle: async (_, args) => {
             const {article} = args;
