@@ -5,7 +5,6 @@ import { ApolloServer, gql } from "apollo-server-express";
 import {typeDefs} from "./typeDefs";
 import {resolvers} from "./resolvers";
 
-import Article from "./models/article.model";
 
 
 const startServer = async () => {
