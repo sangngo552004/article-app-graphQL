@@ -1,24 +1,38 @@
 import express, {Express, Request, Response} from "express";
 import dotenv from "dotenv";
 import {connect as connectDatabase} from "./config/database";
+import { ApolloServer, gql } from "apollo-server-express";
+import {typeDefs} from "./typeDefs";
+import {resolvers} from "./resolvers";
+
 import Article from "./models/article.model";
 
-dotenv.config();
-connectDatabase();
 
-const app : Express = express();
-const port : Number | String = process.env.PORT || 3000;
+const startServer = async () => {
+    dotenv.config();
+    connectDatabase();
 
-//Rest Api
-app.get("/articles", async (req : Request, res : Response) => {
-    const articles = await Article.find({
-        deleted : false
+    const app : Express = express();
+    const port: number | string = process.env.PORT || 3000;
+    
+    //GraphQL API
+    const apolloServer = new ApolloServer({
+        typeDefs,
+        resolvers
     });
-    res.json({
-        articles : articles
-    });
-});
 
-app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
-});
+    await apolloServer.start();
+
+    apolloServer.applyMiddleware({
+        app : app,
+        path : "/graphql"
+    });
+    
+    
+    app.listen(port, () => {
+            console.log(`App listening on port ${port}`);
+    });
+}
+
+startServer();
+
